@@ -1,21 +1,53 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 export default function SignUp (){
     
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [password_comfirm, setPassword_confirm] = useState("");
+
+    const navigate = useNavigate();
+
+
+    function registration (e){
+        e.preventDefault();
+
+        if(password !== password_comfirm){
+            alert("Comfirme sua senha corretamente!")
+            return
+        }
+
+        const URL = "http://localhost:4000/sign-up";
+
+        const body = {
+            name,
+            email,
+            password
+        }
+
+        const promisse = axios.post(URL, body);
+
+        promisse.then((res) => {
+            navigate("/");
+        })
+        promisse.catch((err) => {
+            console.log(err.response.data)
+        })
+
+    }
 
     return(
         <Main>
             <h1>MyWallet</h1>
-            <Formulario >
-                <input  type="email"  placeholder="name" value={name} onChange={e => setName(e.target.value)} required />
+            <Formulario onSubmit={registration}>
+                <input  type="text"  placeholder="name" value={name} onChange={e => setName(e.target.value)} required />
                 <input  type="email"  placeholder="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 <input  type="password" placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} required />
-                <input  type="password" placeholder="Confirmar senha" value={password} onChange={e => setPassword(e.target.value)} required />
+                <input  type="password" placeholder="Confirmar senha" value={password_comfirm} onChange={e => setPassword_confirm(e.target.value)} required />
                 <button type="subimit">Cadastrar</button>
             </Formulario>
             <Link to="/">Já tem uma conta? Entre agora!</Link>

@@ -1,16 +1,45 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate} from "react-router-dom";
 import styled from "styled-components";
+import { CustomerContext } from "../contexts/customer";
+import axios from "axios";
 
 export default function SignIn (){
-    
+
+    const {setToken, setNome} = useContext(CustomerContext)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    function login (e){
+        e.preventDefault();
+
+        const URL = "http://localhost:4000/sign-in";
+
+        const body = {
+            email,
+            password
+        }
+
+        const promisse = axios.post(URL, body);
+
+        promisse.then((res) => {
+            console.log(res.data);
+            setToken(res.data.token);
+            setNome(res.data.name);
+            navigate("/home")
+        })
+        promisse.catch((err) => {
+            console.log(err.response.data)
+        })
+    }
+
 
     return(
         <Main>
             <h1>MyWallet</h1>
-            <Formulario >
+            <Formulario onSubmit={login}>
                 <input  type="email"  placeholder="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 <input  type="password" placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} required />
                 <button type="subimit">Entrar</button>
