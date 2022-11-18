@@ -6,7 +6,7 @@ import axios from "axios";
 
 export default function SignIn (){
 
-    const {setToken, setNome} = useContext(CustomerContext)
+    const {setToken, setNome, setRender, render} = useContext(CustomerContext)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -28,6 +28,7 @@ export default function SignIn (){
             console.log(res.data);
             setToken(res.data.token);
             setNome(res.data.name);
+           
             navigate("/home")
         })
         promisse.catch((err) => {

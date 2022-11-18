@@ -1,6 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components"
-
+import axios from "axios"
+import { useContext } from "react"
+import { CustomerContext } from "../contexts/customer"
+import { useNavigate } from "react-router-dom"
 
 
 export default function Entrada (){
@@ -8,10 +11,44 @@ export default function Entrada (){
     const [description, setDescription] = useState("")
     const type = "positive"
 
+    const {token} = useContext(CustomerContext);
+
+
+    const navigate = useNavigate();
+
+    function positivTransaction(e){
+        e.preventDefault()
+        const URL = "http://localhost:4000/transactions"
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            } 
+        }
+
+        const body = {
+            value: value,
+            description: description,
+            type: type
+        }
+
+        const promisse = axios.post(URL, body, config)
+
+        promisse.then((res) => {
+            navigate("/home")
+        });
+
+        promisse.catch((err) => {
+            console.log(err);
+        });
+
+    }
+   
+
     return(
         <Main>
             <h1>Nova entrada</h1>
-            <Formulario >
+            <Formulario onSubmit={positivTransaction}>
                 <input  type="text"  placeholder="Valor" value={value} onChange={e => setValue(e.target.value)} required />
                 <input  type="text" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required />
                 <button type="subimit">Salvar entrada</button>

@@ -1,16 +1,54 @@
 import styled from "styled-components"
 import { useState } from "react"
+import axios from "axios"
+import { useContext } from "react"
+import { CustomerContext } from "../contexts/customer"
+import { useNavigate } from "react-router-dom"
 
 export default function Saida (){
-    const [value, setValue] = useState("")
-    const [description, setDescription] = useState("")
-    const type = "negative"
+    const [value, setValue] = useState("");
+    const [description, setDescription] = useState("");
+    const type = "negative";
+
+    const {token} = useContext(CustomerContext);
+
+
+    const navigate = useNavigate();
+
+    function negativTransaction(e){
+        e.preventDefault()
+        const URL = "http://localhost:4000/transactions"
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            } 
+        }
+
+        const body = {
+            value: value,
+            description: description,
+            type: type
+        }
+
+        const promisse = axios.post(URL, body, config)
+
+        promisse.then((res) => {
+            navigate("/home")
+        });
+
+        promisse.catch((err) => {
+            console.log(err);
+        });
+
+    }
+   
 
 
     return(
         <Main>
             <h1>Nova saída</h1>
-            <Formulario >
+            <Formulario onSubmit={negativTransaction}>
                 <input  type="text"  placeholder="Valor" value={value} onChange={e => setValue(e.target.value)} required />
                 <input  type="text" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required />
                 <button type="subimit">Salvar saída</button>

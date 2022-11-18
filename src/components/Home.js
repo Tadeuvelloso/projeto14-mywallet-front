@@ -2,20 +2,100 @@ import styled from "styled-components"
 import vetor from "../img/vetor.png"
 import mais from "../img/mais.png"
 import menos from "../img/menos.png"
-import { Link } from "react-router-dom"
-
-
+import { Link, useNavigate } from "react-router-dom"
+import { useContext, useEffect, useState } from "react"
+import { CustomerContext } from "../contexts/customer";
+import axios from "axios"
+import Transacion from "./SingleAction"
 
 export default function HomePage() {
+
+    const {token, nome, render} = useContext(CustomerContext);
+    const [actions, setActions] = useState([])
+    const [total, setTotal] = useState("")
+    let soma = 0;
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        const URL = "http://localhost:4000/transactions";
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            } 
+        }
+
+        const promisse = axios.get(URL, config)
+
+        promisse.then((res) => {
+            setActions(res.data)
+            console.log(res.data)
+        });
+
+        promisse.catch((err) => {
+            console.log(err.response.message);
+        });
+
+    }, [])
+    console.log("alou")
+
+    useEffect(() => {
+        console.log("alou")
+        if(actions.length > 0){
+            console.log("sou maior")
+            actions.forEach((t) => {
+                if(t.type === "positive"){
+                    soma += Number(t.value)
+                    
+                } else {
+                    soma -= Number(t.value)
+                }
+            })
+            console.log("lalala")
+            console.log(soma)
+            return setTotal(soma)
+            
+        }
+    }, [actions])
+
+
+    function logOut() {
+        const URL = "http://localhost:4000/logout";
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            } 
+        }
+
+        const body = token;
+
+        axios.post(URL, body, config)
+        .then(() => {
+            navigate("/")
+        console.log("logOut efetuado com sucesso!")})
+        .catch((err) => console.log(err.response))
+    }
+
+
+ 
+
     return (
         <Main>
             <Header>
-                <p>Olá, Fulano</p>
-                <img src={vetor} alt="img" />
+                <p>Olá, {nome}</p>
+                <img src={vetor} alt="img" onClick={() => logOut()} />
             </Header>
-            <Transaction>
-                Não há registros de entrada ou saída
-            </Transaction>
+            <Transactions>
+                {/* Não há registros de entrada ou saída */}
+                {actions.map((a) => <Transacion key={a._id} value={a.value} description={a.description} date={a.date} type={a.type}/>)}
+                <Grade total={total}>
+                    <h2>Saldo</h2>
+                    <p>{Number(total).toFixed(2)}</p>
+                </Grade>
+            </Transactions>
             <TransactionButtons>
                 <Link to="/entrada">
                     <Entrada>
@@ -45,18 +125,33 @@ justify-content: center;
 font-family: 'Raleway', sans-serif;
 color: white;
 `;
-
-const Transaction = styled.div`
+const Transactions = styled.div`
     height: 446px;
     width: 326px;
     background-color: white;
     border-radius: 5px;
     color: black;
-    text-align: center;
-    align-items: center;
+    align-items: flex-start;
     display: flex;
-    justify-content: center;
-
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow-y: scroll;
+`;
+const Grade = styled.div`
+        display: flex;
+        width: 90%;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: white;
+        z-index: 1;
+        p{
+            color: ${props => props.total > 0 ? "#03AC00" : "#C70000"}
+        }
 `;
 const Header = styled.div`
 display: flex;
@@ -68,6 +163,9 @@ margin: 10px 0px;
     p{
         font-weight: 700;
         font-size: 26px;
+    }
+    img{
+        cursor: pointer;
     }
 `;
 const TransactionButtons = styled.div`

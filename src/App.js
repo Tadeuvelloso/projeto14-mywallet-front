@@ -8,6 +8,7 @@ import SignUp from "./components/SignUpPage";
 import { CustomerProvider } from "./contexts/customer";
 
 export default function App() {
+
   return (
     <BrowserRouter>
       <GlobalStyle />
