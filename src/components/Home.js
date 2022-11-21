@@ -38,13 +38,10 @@ export default function HomePage() {
             console.log(err.response.message);
         });
 
-    }, [])
-    console.log("alou")
+    }, [render])
 
     useEffect(() => {
-        console.log("alou")
-        if(actions.length > 0){
-            console.log("sou maior")
+        if(actions.length >= 0){
             actions.forEach((t) => {
                 if(t.type === "positive"){
                     soma += Number(t.value)
@@ -53,13 +50,9 @@ export default function HomePage() {
                     soma -= Number(t.value)
                 }
             })
-            console.log("lalala")
-            console.log(soma)
-            return setTotal(soma)
-            
+            return setTotal(soma)  
         }
     }, [actions])
-
 
     function logOut() {
         const URL = "http://localhost:4000/logout";
@@ -79,9 +72,6 @@ export default function HomePage() {
         .catch((err) => console.log(err.response))
     }
 
-
- 
-
     return (
         <Main>
             <Header>
@@ -90,7 +80,7 @@ export default function HomePage() {
             </Header>
             <Transactions>
                 {/* Não há registros de entrada ou saída */}
-                {actions.map((a) => <Transacion key={a._id} value={a.value} description={a.description} date={a.date} type={a.type}/>)}
+                {actions.map((a) => <Transacion key={a._id} total={total} setTotal={setTotal} id={a._id} value={a.value} description={a.description} date={a.date} type={a.type}/>)}
                 <Grade total={total}>
                     <h2>Saldo</h2>
                     <p>{Number(total).toFixed(2)}</p>

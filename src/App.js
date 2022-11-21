@@ -6,6 +6,7 @@ import HomePage from "./components/Home";
 import SignIn from "./components/SignInPage.js";
 import SignUp from "./components/SignUpPage";
 import { CustomerProvider } from "./contexts/customer";
+import Atualizar from "./components/AtualizaPage";
 
 export default function App() {
 
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/entrada" element={<Entrada />} />
           <Route path="/saida" element={<Saida />} />
+          <Route path="/atualiza/:id" element={<Atualizar />} />
         </Routes>
       </CustomerProvider>
     </BrowserRouter>
