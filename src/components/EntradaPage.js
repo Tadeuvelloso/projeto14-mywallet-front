@@ -18,7 +18,7 @@ export default function Entrada (){
 
     function positivTransaction(e){
         e.preventDefault()
-        const URL = "http://localhost:4000/transactions"
+        const URL = "https://mywallet-api-izrt.onrender.com/transactions"
 
         const config = {
             headers: {

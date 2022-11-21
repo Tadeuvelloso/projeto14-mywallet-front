@@ -17,7 +17,7 @@ export default function Saida (){
 
     function negativTransaction(e){
         e.preventDefault()
-        const URL = "http://localhost:4000/transactions"
+        const URL = "https://mywallet-api-izrt.onrender.com/transactions"
 
         const config = {
             headers: {

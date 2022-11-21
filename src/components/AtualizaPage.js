@@ -17,7 +17,7 @@ export default function Atualizar() {
 
     function putTransaction(e) {
         e.preventDefault()
-        const URL = `http://localhost:4000/transactions/${id}`
+        const URL = `https://mywallet-api-izrt.onrender.com/transactions/${id}`
 
         const config = {
             headers: {

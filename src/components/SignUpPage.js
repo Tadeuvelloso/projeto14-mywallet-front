@@ -21,7 +21,7 @@ export default function SignUp (){
             return
         }
 
-        const URL = "http://localhost:4000/sign-up";
+        const URL = "https://mywallet-api-izrt.onrender.com/sign-up";
 
         const body = {
             name,
