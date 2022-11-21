@@ -14,7 +14,7 @@ export default function Transacion ({ value, description, date, type, id, total,
 
     function deleteTransaction (id){
 
-        const URL = `https://mywallet-api-izrt.onrender.com/${id}`
+        const URL = `https://mywallet-api-izrt.onrender.com/transactions/${id}`
 
         const config = {
             headers: {
