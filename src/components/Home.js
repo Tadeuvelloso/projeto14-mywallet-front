@@ -55,7 +55,7 @@ export default function HomePage() {
     }, [actions])
 
     function logOut() {
-        const URL = "http://localhost:4000/logout";
+        const URL = "https://mywallet-api-izrt.onrender.com/logout";
 
         const config = {
             headers: {
